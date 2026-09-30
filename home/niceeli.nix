@@ -17,6 +17,8 @@
   programs = {
     home-manager.enable = true;
 
+    gpg.enable = true;
+
     git = {
       enable = true;
       settings = {
@@ -52,6 +54,12 @@
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
+    };
+  };
+  services = {
+    gpg-agent = {
+      enable = true;
+      pinentry.package = pkgs.pinentry-curses;
     };
   };
 }
