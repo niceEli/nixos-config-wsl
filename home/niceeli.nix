@@ -2,6 +2,8 @@
 let 
   gpg-key = "CFF4A1D451688F83";
 in {
+  imports = [ ./nushell.nix ];
+
   home = {
     username = "niceeli";
     homeDirectory = "/home/niceeli";
@@ -35,6 +37,10 @@ in {
           signingkey = gpg-key;
         };
         init.defaultBranch = "master";
+	core = {
+	  autocrlf = "input";
+	  eol = "lf";
+	};
       };
       signing = {
         key = gpg-key;

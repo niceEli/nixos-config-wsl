@@ -8,6 +8,13 @@
   wsl = {
     enable = true;
     defaultUser = "niceeli";
+
+    interop = {
+      includePath = true;
+      register = false; # set true if .exe calls die with "Exec format error"
+    };
+
+    useWindowsDriver = true;
   };
 
   networking.hostName = "nixos";
