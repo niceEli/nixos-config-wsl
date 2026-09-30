@@ -1,5 +1,7 @@
 { pkgs, osConfig, ... }:
-{
+let 
+  gpg-key = "CFF4A1D451688F83";
+in {
   home = {
     username = "niceeli";
     homeDirectory = "/home/niceeli";
@@ -20,7 +22,7 @@
     gpg = {
       enable = true;
       settings = {
-        default-key = "CFF4A1D451688F83";
+        default-key = gpg-key;
       };
     };
 
@@ -30,9 +32,13 @@
         user = {
           name = "Eli Cardoso-Grdovic";
           email = "tape-infix.3m@icloud.com";
-          signingkey = "CFF4A1D451688F83";
+          signingkey = gpg-key;
         };
         init.defaultBranch = "master";
+      };
+      signing = {
+        key = gpg-key;
+        signByDefault = true;
       };
     };
 
