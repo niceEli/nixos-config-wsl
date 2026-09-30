@@ -17,7 +17,12 @@
   programs = {
     home-manager.enable = true;
 
-    gpg.enable = true;
+    gpg = {
+      enable = true;
+      settings = {
+        default-key = "CFF4A1D451688F83";
+      };
+    };
 
     git = {
       enable = true;
