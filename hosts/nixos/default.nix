@@ -1,0 +1,52 @@
+{ inputs, pkgs, ... }:
+{
+  imports = [
+    inputs.nixos-wsl.nixosModules.default
+    inputs.home-manager.nixosModules.home-manager
+  ];
+
+  wsl = {
+    enable = true;
+    defaultUser = "niceeli";
+  };
+
+  networking.hostName = "nixos";
+
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    trusted-users = [
+      "root"
+      "niceeli"
+    ];
+  };
+
+  nixpkgs.config.allowUnfree = true;
+
+  programs.nix-ld.enable = true; # lets prebuilt binaries (Rider's stuff, dotnet tools, etc.) run
+
+  programs.nh = {
+    enable = true;
+    clean.enable = true;
+    clean.extraArgs = "--keep-since 4d --keep 3";
+  };
+
+  environment.systemPackages = with pkgs; [
+    git
+    vim
+    wget
+    curl
+  ];
+
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    extraSpecialArgs = { inherit inputs; };
+    users.niceeli = import ../../home/niceeli.nix;
+  };
+
+  # set this to the release you first installed and then leave it alone
+  system.stateVersion = "26.05";
+}
