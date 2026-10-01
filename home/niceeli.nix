@@ -2,7 +2,18 @@
 let 
   gpg-key = "CFF4A1D451688F83";
 in {
-  imports = [ ./nushell.nix ];
+  xdg = {
+    enable = true;
+    userDirs = {
+      enable = true;
+      createDirectories = true;
+    };
+    configFile = {
+      "nvim/init.lua".source = ./nvim/init.lua;
+    };
+  };
+
+  imports = [ ./shell/nushell.nix ];
 
   home = {
     username = "niceeli";
@@ -63,7 +74,7 @@ in {
     oh-my-posh = {
       enable = true;
       enableNushellIntegration = true;
-      settings = builtins.fromJSON (builtins.readFile ./config.omp.json);
+      settings = builtins.fromJSON (builtins.readFile ./shell/config.omp.json);
     };
 
     neovim = {

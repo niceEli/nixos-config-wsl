@@ -1,8 +1,5 @@
 { config, ... }:
 {
-  # sets XDG_CONFIG_HOME / DATA / CACHE (replaces your three XDG lines)
-  xdg.enable = true;
-
   home.sessionVariables = {
     CARGO_HOME = "${config.xdg.dataHome}/cargo";
     RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
