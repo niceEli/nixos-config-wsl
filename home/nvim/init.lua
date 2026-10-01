@@ -2,6 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 local o = vim.opt
+o.exrc = true
 o.number = true
 o.relativenumber = true
 o.expandtab = true
@@ -45,6 +46,11 @@ map("n", "<C-l>", "<C-w>l")
 map("v", "<", "<gv")
 map("v", ">", ">gv")
 map("i", "<C-Space>", vim.lsp.completion.get, { desc = "Trigger LSP Completion" })
+
+vim.keymap.set("t", "<C-x>", [[<C-\><C-n>]])
+vim.keymap.set("t", "jk", [[<C-\><C-n>]])
+
+vim.keymap.set({ "i", "v" }, "jk", "<Esc>")
 
 for _, p in ipairs({ "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" }) do
   vim.g["loaded_" .. p] = 1
