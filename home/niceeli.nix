@@ -26,6 +26,7 @@ in {
       jq
       btop
       fastfetch
+      lazygit
     ];
   };
 

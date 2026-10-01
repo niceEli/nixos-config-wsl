@@ -45,7 +45,7 @@ local map = vim.keymap.set
 map("n", "<leader>fw", "<cmd>w<cr>", { desc = "Write file" })
 map("n", "<leader>qq", "<cmd>q<cr>", { desc = "Quit" })
 map("n", "<leader>QQ", "<cmd>qa!<cr>", { desc = "Force quit all" })
-map("n", "<leader>h", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
+map("n", "<M-/>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
 map("n", "<leader>e", "<cmd>Oil<cr>", { desc = "File explorer (oil)" })
 map("n", "-", "<cmd>Oil<cr>", { desc = "Open parent dir" })
 map("n", "<C-h>", "<C-w>h")
@@ -54,7 +54,6 @@ map("n", "<C-k>", "<C-w>k")
 map("n", "<C-l>", "<C-w>l")
 map("v", "<", "<gv")
 map("v", ">", ">gv")
-map("n", "<M-/>", "<cmd>nohlsearch<CR>")
 map("i", "<C-Space>", vim.lsp.completion.get, { desc = "Trigger LSP Completion" })
 
 -- skip some builtin plugins we never use
@@ -73,8 +72,6 @@ vim.pack.add({
   "https://github.com/MeanderingProgrammer/render-markdown.nvim",
 
   "https://github.com/folke/which-key.nvim",
-
-  "https://github.com/navarasu/onedark.nvim",
 })
 
 require("mini.pick").setup()
@@ -174,9 +171,4 @@ local function transparent()
 end
 vim.api.nvim_create_autocmd("ColorScheme", { callback = transparent })
 
--- vim.cmd.colorscheme("habamax")
-
-require('onedark').setup {
-    style = 'darker'
-}
-require('onedark').load()
+vim.cmd.colorscheme("habamax")
