@@ -54,6 +54,8 @@
     users.niceeli = import ../../home/niceeli.nix;
   };
 
+  time.timeZone = "America/Toronto";
+
   # set this to the release you first installed and then leave it alone
   system.stateVersion = "26.05";
 }
