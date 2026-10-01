@@ -1,4 +1,3 @@
--- minimal nvim config: native vim.pack, a few small plugins, native LSP
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -28,19 +27,10 @@ o.hlsearch = true
 o.lazyredraw = true
 o.completeopt = { "menu", "menuone", "noselect", "fuzzy", "popup" }
 
--- clipboard provider lookup is slow (worst on WSL) and blocks startup,
--- so set it once the UI is up
--- vim.api.nvim_create_autocmd("UIEnter", {
---   once = true,
---   callback = function() o.clipboard = "unnamedplus" end,
--- })
-
--- quick open: native :find with fuzzy matching, no finder plugin
 o.path:append("**")
 o.wildoptions = { "pum", "fuzzy" }
 o.wildignore:append({ "*/.git/*", "*/node_modules/*", "*/bin/*", "*/obj/*" })
 
--- keymaps
 local map = vim.keymap.set
 map("n", "<leader>fw", "<cmd>w<cr>", { desc = "Write file" })
 map("n", "<leader>qq", "<cmd>q<cr>", { desc = "Quit" })
@@ -56,12 +46,10 @@ map("v", "<", "<gv")
 map("v", ">", ">gv")
 map("i", "<C-Space>", vim.lsp.completion.get, { desc = "Trigger LSP Completion" })
 
--- skip some builtin plugins we never use
 for _, p in ipairs({ "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" }) do
   vim.g["loaded_" .. p] = 1
 end
 
--- plugins (native package manager, needs nvim 0.12+)
 vim.pack.add({
   "https://github.com/stevearc/oil.nvim",
 
@@ -81,13 +69,11 @@ require("render-markdown").setup()
 
 require("oil").setup({
   default_file_explorer = true,
-  -- dired-style `ls -l` listing, and no icons so no nerd font needed
   columns = { "permissions", "size", "mtime" },
-  constrain_cursor = false, -- cursor can go anywhere, not just on the filename
+  constrain_cursor = false,
   view_options = { show_hidden = true },
 })
 
--- which-key (no icons, no nerd font)
 local wk = require("which-key")
 wk.setup({ icons = { mappings = false } })
 wk.add({
@@ -96,16 +82,12 @@ wk.add({
   { "<leader>c", group = "code" },
 })
 
--- diagnostics
 vim.diagnostic.config({
   virtual_text = true,
   severity_sort = true,
   float = { border = "rounded", source = true },
 })
 
--- LSP: native client, nvim-lspconfig only supplies the server definitions.
--- name -> binary. Servers whose binary isn't on PATH are skipped silently,
--- so install them through nix and they just turn on.
 local servers = {
   lua_ls = "lua-language-server",
   ts_ls = "typescript-language-server",
@@ -125,19 +107,6 @@ vim.lsp.config("lua_ls", {
   },
 })
 
--- enable after the UI is up: executable() walks all of PATH, and on WSL that
--- includes the slow /mnt/c Windows entries
--- vim.api.nvim_create_autocmd("UIEnter", {
---   once = true,
---   callback = function()
---     for name, bin in pairs(servers) do
---       if vim.fn.executable(bin) == 1 then
---         vim.lsp.enable(name)
---       end
---     end
---   end,
--- })
-
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
@@ -149,15 +118,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
     lmap("<leader>rn", vim.lsp.buf.rename, "Rename")
     lmap("<leader>cf", function() vim.lsp.buf.format({ async = true }) end, "Format")
     lmap("<leader>d", vim.diagnostic.open_float, "Line diagnostics")
-    -- built-in completion popup as you type
     if client and client:supports_method("textDocument/completion") then
       vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
     end
   end,
 })
 
--- transparent background: strip bg from the main groups, keep their fg.
--- hooked to ColorScheme so it survives switching themes.
 local function transparent()
   local groups = {
     "Normal", "NormalNC", "NormalFloat", "FloatBorder", "SignColumn",
