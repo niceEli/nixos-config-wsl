@@ -32,7 +32,7 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  programs.nix-ld.enable = true; # lets prebuilt binaries (Rider's stuff, dotnet tools, etc.) run
+  programs.nix-ld.enable = true;
 
   programs.nh = {
     enable = true;

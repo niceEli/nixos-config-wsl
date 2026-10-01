@@ -55,14 +55,21 @@ vim.pack.add({
 
   "https://github.com/echasnovski/mini.pick",
   "https://github.com/nvim-mini/mini.icons",
+  "https://github.com/j-hui/fidget.nvim",
 
   "https://github.com/neovim/nvim-lspconfig",
   "https://github.com/MeanderingProgrammer/render-markdown.nvim",
+  "https://github.com/echasnovski/mini.pairs",
 
   "https://github.com/folke/which-key.nvim",
 })
 
 require("mini.pick").setup()
+
+require("mini.pairs").setup()
+
+require('fidget').setup()
+
 vim.keymap.set("n", "<leader><leader>", function() MiniPick.builtin.files() end, { desc = "Quick open" })
 
 require("render-markdown").setup()
@@ -83,19 +90,33 @@ wk.add({
 })
 
 vim.diagnostic.config({
-  virtual_text = true,
+  virtual_text = {
+    spacing = 2,
+    source = "if_many",
+  },
+  signs = true,
+  underline = true,
   severity_sort = true,
-  float = { border = "rounded", source = true },
+  update_in_insert = false,
+  float = {
+    border = "rounded",
+    source = true,
+    header = "",
+    prefix = " ",
+  },
 })
 
-local servers = {
-  lua_ls = "lua-language-server",
-  ts_ls = "typescript-language-server",
-  pyright = "pyright-langserver",
-  clangd = "clangd",
-  csharp_ls = "csharp-ls",
-  kotlin_language_server = "kotlin-language-server",
-}
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    vim.diagnostic.open_float(nil, {
+      focusable = false,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      border = "rounded",
+      source = "if_many",
+      scope = "cursor",
+    })
+  end,
+})
 
 vim.lsp.config("lua_ls", {
   settings = {
@@ -110,16 +131,53 @@ vim.lsp.config("lua_ls", {
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    local function lmap(keys, fn, desc)
-      map("n", keys, fn, { buffer = ev.buf, desc = desc })
+    local buf = ev.buf
+
+    local function lmap(keys, fn, desc, modes)
+      map(modes or "n", keys, fn, {
+        buffer = buf,
+        desc = desc,
+      })
     end
+
     lmap("gd", vim.lsp.buf.definition, "Go to definition")
+    lmap("gD", vim.lsp.buf.declaration, "Go to declaration")
+    lmap("gr", vim.lsp.buf.references, "Find references")
+    lmap("gi", vim.lsp.buf.implementation, "Go to implementation")
+
+    lmap("K", vim.lsp.buf.hover, "Hover documentation")
+    lmap("<C-k>", vim.lsp.buf.signature_help, "Signature help", "i")
+
     lmap("<leader>ca", vim.lsp.buf.code_action, "Code action")
     lmap("<leader>rn", vim.lsp.buf.rename, "Rename")
-    lmap("<leader>cf", function() vim.lsp.buf.format({ async = true }) end, "Format")
+    lmap("<leader>cf", function()
+      vim.lsp.buf.format({ async = true })
+    end, "Format")
+
     lmap("<leader>d", vim.diagnostic.open_float, "Line diagnostics")
+    lmap("[d", function()
+      vim.diagnostic.jump({ count = -1, float = true })
+    end, "Previous diagnostic")
+    lmap("]d", function()
+      vim.diagnostic.jump({ count = 1, float = true })
+    end, "Next diagnostic")
+    lmap("<leader>dl", vim.diagnostic.setloclist, "Diagnostics list")
+
     if client and client:supports_method("textDocument/completion") then
-      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+      vim.lsp.completion.enable(true, client.id, buf, {
+        autotrigger = true,
+      })
+
+      lmap("<C-Space>", vim.lsp.completion.get, "Trigger completion", "i")
+    end
+
+    if client and client:supports_method("textDocument/inlayHint") then
+      lmap("<leader>uh", function()
+        vim.lsp.inlay_hint.enable(
+          not vim.lsp.inlay_hint.is_enabled({ bufnr = buf }),
+          { bufnr = buf }
+        )
+      end, "Toggle inlay hints")
     end
   end,
 })

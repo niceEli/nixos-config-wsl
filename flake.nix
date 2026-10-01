@@ -42,6 +42,7 @@
             packages = with pkgs; [
               nixfmt
               nil
+              lua-language-server
             ];
           };
         };
