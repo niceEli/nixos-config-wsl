@@ -1,5 +1,5 @@
 { pkgs, osConfig, ... }:
-let 
+let
   gpg-key = "CFF4A1D451688F83";
 in {
   xdg = {
@@ -27,6 +27,7 @@ in {
       btop
       fastfetch
       lazygit
+      tmux
     ];
   };
 
