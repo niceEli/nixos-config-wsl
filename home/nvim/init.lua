@@ -46,6 +46,7 @@ map("n", "<C-l>", "<C-w>l")
 map("v", "<", "<gv")
 map("v", ">", ">gv")
 map("i", "<C-Space>", vim.lsp.completion.get, { desc = "Trigger LSP Completion" })
+map("n", "<leader>pu", vim.pack.update, { desc = "Update Packages" })
 
 vim.keymap.set("t", "<C-x>", [[<C-\><C-n>]])
 vim.keymap.set("t", "jk", [[<C-\><C-n>]])
