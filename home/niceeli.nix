@@ -92,6 +92,11 @@ in
       terminal = "tmux-256color";
       historyLimit = 100000;
     };
+
+    yazi = {
+      enable = true;
+      enableNushellIntegration = true;
+    };
   };
   services = {
     gpg-agent = {
