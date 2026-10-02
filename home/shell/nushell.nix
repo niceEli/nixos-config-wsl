@@ -28,7 +28,6 @@
         ffmpeg = "ffmpeg.exe";
         ffplay = "ffplay.exe";
         ffprobe = "ffprobe.exe";
-        xdg-open = "powershell.exe Start";
         pwsh = "pwsh.exe";
       };
 

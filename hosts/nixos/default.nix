@@ -45,6 +45,8 @@
     vim
     wget
     curl
+    xdg-utils
+    wsl-open
   ];
 
   home-manager = {
