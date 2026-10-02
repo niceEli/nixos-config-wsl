@@ -61,6 +61,7 @@ vim.pack.add({
 
   "https://github.com/echasnovski/mini.pick",
   "https://github.com/nvim-mini/mini.icons",
+  "https://github.com/nvim-mini/mini.statusline",
   "https://github.com/j-hui/fidget.nvim",
 
   "https://github.com/neovim/nvim-lspconfig",
@@ -70,9 +71,13 @@ vim.pack.add({
   "https://github.com/folke/which-key.nvim",
 })
 
+require("mini.icons").setup()
+
 require("mini.pick").setup()
 
 require("mini.pairs").setup()
+
+require("mini.statusline").setup()
 
 require('fidget').setup()
 
