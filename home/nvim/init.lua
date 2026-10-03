@@ -96,7 +96,7 @@ require("oil").setup({
 })
 
 require("image").setup({
-  backend = "sixel"
+  backend = "sixel",
 })
 
 local wk = require("which-key")
