@@ -28,6 +28,7 @@ in
       btop
       fastfetch
       lazygit
+      imagemagick
     ];
   };
 

@@ -70,6 +70,8 @@ vim.pack.add({
   "https://github.com/echasnovski/mini.pairs",
 
   "https://github.com/folke/which-key.nvim",
+
+  "https://github.com/3rd/image.nvim",
 })
 
 require("mini.icons").setup()
@@ -91,6 +93,10 @@ require("oil").setup({
   columns = { "permissions", "size", "mtime" },
   constrain_cursor = false,
   view_options = { show_hidden = true },
+})
+
+require("image").setup({
+  backend = "sixel"
 })
 
 local wk = require("which-key")
