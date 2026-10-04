@@ -41,6 +41,7 @@
 
   environment.systemPackages = with pkgs; [
     git
+    git-lfs
     vim
     wget
     curl
