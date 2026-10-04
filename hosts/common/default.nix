@@ -38,6 +38,10 @@
     clean.enable = true;
     clean.extraArgs = "--keep-since 4d --keep 3";
   };
+  programs.fuse = {
+    enable = true;
+    userAllowOther = true;
+  };
 
   environment.systemPackages = with pkgs; [
     git
@@ -47,6 +51,9 @@
     curl
     xdg-utils
     wsl-open
+    fuse
+    fuse3
+    appimage-run
   ];
 
   home-manager = {
