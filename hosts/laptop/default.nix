@@ -2,5 +2,5 @@
   imports = [ ../common ];
 
   networking.hostName = "laptop";
-  niceeli.gpgKey = "REPLACE_LATER";
+  niceeli.gpgKey = "61155ECC15967307";
 }
