@@ -1,6 +1,6 @@
 { pkgs, osConfig, ... }:
 let
-  gpg-key = "CFF4A1D451688F83";
+  gpg-key = osConfig.niceeli.gpgKey;
 in
 {
   xdg = {
@@ -47,7 +47,6 @@ in
         user = {
           name = "Eli Cardoso-Grdovic";
           email = "tape-infix.3m@icloud.com";
-          signingkey = gpg-key;
         };
         init.defaultBranch = "master";
         core = {

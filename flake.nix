@@ -18,6 +18,15 @@
 
   outputs =
     inputs@{ flake-parts, nixpkgs, ... }:
+    let
+      mkHost =
+        name:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [ ./hosts/${name} ];
+        };
+    in
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [
         "x86_64-linux"
@@ -25,10 +34,9 @@
 
       # system-level outputs (not per-arch)
       flake = {
-        nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [ ./hosts/nixos ];
+        nixosConfigurations = {
+          desktop = mkHost "desktop";
+          laptop = mkHost "laptop";
         };
       };
 

@@ -1,6 +1,7 @@
 { inputs, pkgs, ... }:
 {
   imports = [
+    ./options.nix
     inputs.nixos-wsl.nixosModules.default
     inputs.home-manager.nixosModules.home-manager
   ];
@@ -16,8 +17,6 @@
 
     useWindowsDriver = true;
   };
-
-  networking.hostName = "nixos";
 
   nix.settings = {
     experimental-features = [
