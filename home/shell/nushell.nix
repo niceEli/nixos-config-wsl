@@ -29,6 +29,8 @@
         ffplay = "ffplay.exe";
         ffprobe = "ffprobe.exe";
         pwsh = "pwsh.exe";
+        e = "nvim";
+        t = "tmux";
       };
 
       extraConfig = ''
