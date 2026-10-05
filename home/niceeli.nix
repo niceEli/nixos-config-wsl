@@ -14,7 +14,10 @@ in
     };
   };
 
-  imports = [ ./shell/nushell.nix ];
+  imports = [
+    ./shell/nushell.nix
+    ./shell/tmux.nix
+  ];
 
   home = {
     username = "niceeli";
