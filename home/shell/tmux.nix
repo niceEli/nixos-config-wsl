@@ -55,29 +55,28 @@
 
       set -g status-position top
       set -g status-interval 5
-      set -g status-style "bg=#1e1e2e,fg=#cdd6f4"
+      set -g status-style "bg=#1c1c1c,fg=#c7c7c7"
       set -g status-left-length 40
       set -g status-right-length 80
 
-      set -g status-left "#[bg=#{?client_prefix,#f38ba8,#cba6f7},fg=#1e1e2e,bold]  #S #[bg=#1e1e2e,fg=default] "
-      set -g status-right "#[fg=#6c7086]#{b:pane_current_path}  #[bg=#313244,fg=#cdd6f4] %a %d %b  %H:%M "
+      set -g status-left "#[bg=#{?client_prefix,#d7af87,#af87af},fg=#1c1c1c,bold]  #S #[bg=#1c1c1c,fg=default] "
+      set -g status-right "#[fg=#767676]#{b:pane_current_path}  #[bg=#303030,fg=#c7c7c7] %a %d %b  %H:%M "
 
       set -g status-justify left
       setw -g window-status-separator ""
-      setw -g window-status-format         "#[fg=#6c7086] #I #W "
-      setw -g window-status-current-format "#[bg=#313244,fg=#89b4fa,bold] #I #W#{?window_zoomed_flag, 󰁌,} "
-      setw -g window-status-activity-style "fg=#fab387"
+      setw -g window-status-format         "#[fg=#767676] #I #W "
+      setw -g window-status-current-format "#[bg=#9e9e9e,fg=#1c1c1c,bold] #I #W#{?window_zoomed_flag, 󰁌,} "
+      setw -g window-status-activity-style "fg=#d7af87"
       setw -g monitor-activity on
       set -g visual-activity off
 
-      set -g pane-border-style "fg=#313244"
-      set -g pane-active-border-style "fg=#cba6f7"
+      set -g pane-border-style "fg=#3a3a3a"
+      set -g pane-active-border-style "fg=#af87af"
       set -g pane-border-lines heavy
 
-      set -g message-style "bg=#313244,fg=#cdd6f4"
-      set -g message-command-style "bg=#313244,fg=#a6e3a1"
-      setw -g mode-style "bg=#cba6f7,fg=#1e1e2e"
+      set -g message-style "bg=#3a3a3a,fg=#c7c7c7"
+      set -g message-command-style "bg=#3a3a3a,fg=#87af87"
+      setw -g mode-style "bg=#1a3456,fg=#c7c7c7"
     '';
   };
 }
-
