@@ -32,6 +32,29 @@ o.path:append("**")
 o.wildoptions = { "pum", "fuzzy" }
 o.wildignore:append({ "*/.git/*", "*/node_modules/*", "*/bin/*", "*/obj/*" })
 
+vim.g.clipboard = {
+  name = "WSL Clipboard",
+  copy = {
+    ["+"] = { "clip.exe" },
+    ["*"] = { "clip.exe" },
+  },
+  paste = {
+    ["+"] = {
+      "powershell.exe",
+      "-NoProfile",
+      "-Command",
+      "Get-Clipboard -Raw",
+    },
+    ["*"] = {
+      "powershell.exe",
+      "-NoProfile",
+      "-Command",
+      "Get-Clipboard -Raw",
+    },
+  },
+  cache_enabled = false,
+}
+
 local map = vim.keymap.set
 map("n", "<leader>fw", "<cmd>w<cr>", { desc = "Write file" })
 map("n", "<leader>qq", "<cmd>q<cr>", { desc = "Quit" })
