@@ -12,7 +12,7 @@
 
     interop = {
       includePath = true;
-      register = false; # set true if .exe calls die with "Exec format error"
+      register = true;
     };
 
     useWindowsDriver = true;
