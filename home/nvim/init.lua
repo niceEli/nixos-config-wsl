@@ -32,26 +32,34 @@ o.path:append("**")
 o.wildoptions = { "pum", "fuzzy" }
 o.wildignore:append({ "*/.git/*", "*/node_modules/*", "*/bin/*", "*/obj/*" })
 
+
 vim.g.clipboard = {
   name = "WSL Clipboard",
+
   copy = {
-    ["+"] = { "clip.exe" },
-    ["*"] = { "clip.exe" },
+    ["+"] = {
+      "clip.exe",
+    },
+    ["*"] = {
+      "clip.exe",
+    },
   },
+
   paste = {
     ["+"] = {
       "powershell.exe",
       "-NoProfile",
       "-Command",
-      "Get-Clipboard -Raw",
+      "[Console]::Out.Write((Get-Clipboard -Raw).Replace(\"`r\", \"\"))",
     },
     ["*"] = {
       "powershell.exe",
       "-NoProfile",
       "-Command",
-      "Get-Clipboard -Raw",
+      "[Console]::Out.Write((Get-Clipboard -Raw).Replace(\"`r\", \"\"))",
     },
   },
+
   cache_enabled = false,
 }
 
