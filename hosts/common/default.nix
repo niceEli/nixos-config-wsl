@@ -16,6 +16,11 @@
     };
 
     useWindowsDriver = true;
+
+    wslConf.automount = {
+      enabled = true;
+      mountFsTab = true;
+    };
   };
 
   nix.settings = {
