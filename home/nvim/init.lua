@@ -74,15 +74,17 @@ map("n", "<C-h>", "<C-w>h")
 map("n", "<C-j>", "<C-w>j")
 map("n", "<C-k>", "<C-w>k")
 map("n", "<C-l>", "<C-w>l")
+map("n", "<M-h>", "<cmd>vertical resize -3<cr>", { desc = "Shrink width" })
+map("n", "<M-l>", "<cmd>vertical resize +3<cr>", { desc = "Grow width" })
+map("n", "<M-j>", "<cmd>resize -2<cr>", { desc = "Shrink height" })
+map("n", "<M-k>", "<cmd>resize +2<cr>", { desc = "Grow height" })
+map("n", "<M-=>", "<C-w>=", { desc = "Equalize panes" })
 map("v", "<", "<gv")
 map("v", ">", ">gv")
 map("i", "<C-Space>", vim.lsp.completion.get, { desc = "Trigger LSP Completion" })
 map("n", "<leader>pu", vim.pack.update, { desc = "Update Packages" })
 
 vim.keymap.set("t", "<C-x>", [[<C-\><C-n>]])
-vim.keymap.set("t", "jk", [[<C-\><C-n>]])
-
-vim.keymap.set({ "i", "v" }, "jk", "<Esc>")
 
 for _, p in ipairs({ "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" }) do
   vim.g["loaded_" .. p] = 1
@@ -128,6 +130,11 @@ require("oil").setup({
 
 require("image").setup({
   backend = "sixel",
+  integrations = {
+    typst = {
+      enabled = false,
+    },
+  }
 })
 
 local wk = require("which-key")
@@ -230,6 +237,82 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
   end,
 })
+
+-- :Compile
+do
+  local C = { cmd = nil, buf = nil, job = nil }
+
+  local function get_win()
+    local win = C.buf and vim.api.nvim_buf_is_valid(C.buf) and vim.fn.bufwinid(C.buf) or -1
+    if win ~= -1 then return win end
+    local prev = vim.api.nvim_get_current_win()
+    vim.cmd('botright 12split')
+    win = vim.api.nvim_get_current_win()
+    vim.wo[win].number = false
+    vim.wo[win].relativenumber = false
+    vim.wo[win].signcolumn = 'no'
+    vim.api.nvim_set_current_win(prev)
+    return win
+  end
+
+  local function run()
+    local old_buf, old_job = C.buf, C.job
+    local win = get_win()
+    local cwd = vim.fn.getcwd()
+
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_win_set_buf(win, buf)
+    C.buf = buf
+
+    if old_job then pcall(vim.fn.jobstop, old_job) end
+    if old_buf and old_buf ~= buf and vim.api.nvim_buf_is_valid(old_buf) then
+      pcall(vim.api.nvim_buf_delete, old_buf, { force = true })
+    end
+
+    local job
+    vim.api.nvim_win_call(win, function()
+      job = vim.fn.jobstart(C.cmd, {
+        term = true,
+        cwd = cwd,
+        on_exit = function(id)
+          if C.job ~= id then return end
+          C.job = nil
+          vim.defer_fn(function()
+            if not vim.api.nvim_buf_is_valid(buf) then return end
+            local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+            while #lines > 0 and lines[#lines]:match('^%s*$') do table.remove(lines) end
+            vim.fn.setqflist({}, ' ', { title = C.cmd, lines = lines })
+          end, 50)
+        end,
+      })
+      vim.cmd('normal! G')
+    end)
+    C.job = job
+  end
+
+  local function prompt()
+    vim.ui.input({
+      prompt = 'Compile command: ',
+      default = C.cmd or 'make -k ',
+      completion = 'shellcmd',
+    }, function(input)
+      if not input or input == '' then return end
+      C.cmd = input
+      run()
+    end)
+  end
+
+  vim.api.nvim_create_user_command('Compile', function(o)
+    if o.args ~= '' then
+      C.cmd = o.args
+      run()
+    elseif o.bang or not C.cmd then
+      prompt()
+    else
+      run()
+    end
+  end, { nargs = '*', bang = true, complete = 'shellcmd' })
+end
 
 local function transparent()
   local groups = {
