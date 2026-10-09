@@ -27,6 +27,7 @@ o.incsearch = true
 o.hlsearch = true
 o.lazyredraw = true
 o.completeopt = { "menu", "menuone", "noselect", "fuzzy", "popup" }
+o.colorcolumn = "80"
 
 o.path:append("**")
 o.wildoptions = { "pum", "fuzzy" }
