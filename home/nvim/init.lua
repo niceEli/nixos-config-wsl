@@ -105,6 +105,10 @@ vim.pack.add({
   "https://github.com/folke/which-key.nvim",
 
   "https://github.com/3rd/image.nvim",
+
+  "https://github.com/nvim-lua/plenary.nvim",
+  "https://github.com/m00qek/baleia.nvim",
+  "https://github.com/ej-shafran/compile-mode.nvim"
 })
 
 require("mini.icons").setup()
@@ -161,6 +165,12 @@ vim.diagnostic.config({
     prefix = " ",
   },
 })
+
+vim.g.baleia = require("baleia").setup({})
+vim.g.compile_mode = {
+  bang_expansion = true,
+}
+--require("compile-mode")
 
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
@@ -237,82 +247,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
   end,
 })
-
--- :Compile
-do
-  local C = { cmd = nil, buf = nil, job = nil }
-
-  local function get_win()
-    local win = C.buf and vim.api.nvim_buf_is_valid(C.buf) and vim.fn.bufwinid(C.buf) or -1
-    if win ~= -1 then return win end
-    local prev = vim.api.nvim_get_current_win()
-    vim.cmd('botright 12split')
-    win = vim.api.nvim_get_current_win()
-    vim.wo[win].number = false
-    vim.wo[win].relativenumber = false
-    vim.wo[win].signcolumn = 'no'
-    vim.api.nvim_set_current_win(prev)
-    return win
-  end
-
-  local function run()
-    local old_buf, old_job = C.buf, C.job
-    local win = get_win()
-    local cwd = vim.fn.getcwd()
-
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_win_set_buf(win, buf)
-    C.buf = buf
-
-    if old_job then pcall(vim.fn.jobstop, old_job) end
-    if old_buf and old_buf ~= buf and vim.api.nvim_buf_is_valid(old_buf) then
-      pcall(vim.api.nvim_buf_delete, old_buf, { force = true })
-    end
-
-    local job
-    vim.api.nvim_win_call(win, function()
-      job = vim.fn.jobstart(C.cmd, {
-        term = true,
-        cwd = cwd,
-        on_exit = function(id)
-          if C.job ~= id then return end
-          C.job = nil
-          vim.defer_fn(function()
-            if not vim.api.nvim_buf_is_valid(buf) then return end
-            local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-            while #lines > 0 and lines[#lines]:match('^%s*$') do table.remove(lines) end
-            vim.fn.setqflist({}, ' ', { title = C.cmd, lines = lines })
-          end, 50)
-        end,
-      })
-      vim.cmd('normal! G')
-    end)
-    C.job = job
-  end
-
-  local function prompt()
-    vim.ui.input({
-      prompt = 'Compile command: ',
-      default = C.cmd or 'make -k ',
-      completion = 'shellcmd',
-    }, function(input)
-      if not input or input == '' then return end
-      C.cmd = input
-      run()
-    end)
-  end
-
-  vim.api.nvim_create_user_command('Compile', function(o)
-    if o.args ~= '' then
-      C.cmd = o.args
-      run()
-    elseif o.bang or not C.cmd then
-      prompt()
-    else
-      run()
-    end
-  end, { nargs = '*', bang = true, complete = 'shellcmd' })
-end
 
 local function transparent()
   local groups = {
