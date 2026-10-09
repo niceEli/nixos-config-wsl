@@ -28,6 +28,9 @@ o.hlsearch = true
 o.lazyredraw = true
 o.completeopt = { "menu", "menuone", "noselect", "fuzzy", "popup" }
 o.colorcolumn = "80"
+if vim.o.shell:match("/nu$") then
+    vim.opt.shellpipe = "| ^tee"
+end
 
 o.path:append("**")
 o.wildoptions = { "pum", "fuzzy" }
