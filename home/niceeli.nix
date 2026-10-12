@@ -104,6 +104,11 @@ in
       enable = true;
       enableNushellIntegration = true;
     };
+
+    fzf = {
+      enable = true;
+      enableNushellIntegration = true;
+    };
   };
   services = {
     gpg-agent = {
