@@ -56,6 +56,9 @@ in
           autocrlf = "input";
           eol = "lf";
         };
+        diff.tool = "nvimdiff";
+        difftool.prompt = false;
+        merge.tool = "nvimdiff";
       };
       signing = {
         key = gpg-key;
@@ -105,7 +108,7 @@ in
       enableNushellIntegration = true;
     };
 
-    fzf = {
+    carapace = {
       enable = true;
       enableNushellIntegration = true;
     };
