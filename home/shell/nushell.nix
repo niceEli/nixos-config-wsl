@@ -55,14 +55,12 @@
       '';
     };
 
-    # replaces the zoxide cache-file dance
     zoxide = {
       enable = true;
       enableNushellIntegration = true;
       options = [ "--cmd cd" ];
     };
 
-    # replaces the hand-rolled PWD hook
     direnv = {
       enable = true;
       nix-direnv.enable = true;

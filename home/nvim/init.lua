@@ -29,7 +29,7 @@ o.lazyredraw = true
 o.completeopt = { "menu", "menuone", "noselect", "fuzzy", "popup" }
 o.colorcolumn = "80"
 if vim.o.shell:match("/nu$") then
-    vim.opt.shellpipe = "| ^tee"
+  vim.opt.shellpipe = "| ^tee"
 end
 
 o.path:append("**")
@@ -85,7 +85,8 @@ map("n", "<M-k>", "<cmd>resize +2<cr>", { desc = "Grow height" })
 map("n", "<M-=>", "<C-w>=", { desc = "Equalize panes" })
 map("v", "<", "<gv")
 map("v", ">", ">gv")
-map("i", "<C-Space>", vim.lsp.completion.get, { desc = "Trigger LSP Completion" })
+map("i", "<C-Space>", vim.lsp.completion.get,
+  { desc = "Trigger LSP Completion" })
 map("n", "<leader>pu", vim.pack.update, { desc = "Update Packages" })
 
 vim.keymap.set("t", "<C-x>", [[<C-\><C-n>]])
@@ -125,7 +126,10 @@ require("mini.statusline").setup()
 
 require('fidget').setup()
 
-vim.keymap.set("n", "<leader><leader>", function() MiniPick.builtin.files() end, { desc = "Quick open" })
+vim.keymap.set("n", "<leader><leader>", function()
+  ---@diagnostic disable-next-line: undefined-global
+  MiniPick.builtin.files()
+end, { desc = "Quick open" })
 
 require("render-markdown").setup()
 
