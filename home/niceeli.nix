@@ -1,4 +1,9 @@
-{ pkgs, osConfig, ... }:
+{
+  pkgs,
+  osConfig,
+  inputs,
+  ...
+}:
 let
   gpg-key = osConfig.niceeli.gpgKey;
 in
@@ -9,12 +14,11 @@ in
       enable = true;
       createDirectories = true;
     };
-    configFile = {
-      "nvim/init.lua".source = ./nvim/init.lua;
-    };
   };
 
   imports = [
+    inputs.nixvim.homeModules.nixvim
+    ./nvim
     ./shell/nushell.nix
     ./shell/tmux.nix
   ];
@@ -82,18 +86,6 @@ in
       enable = true;
       enableNushellIntegration = true;
       settings = builtins.fromJSON (builtins.readFile ./shell/config.omp.json);
-    };
-
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
-      extraLuaPackages = ps: [ ps.magick ];
-      extraPackages = with pkgs; [
-        imagemagick
-        ghostscript
-      ];
     };
 
     tmux = {
