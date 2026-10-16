@@ -42,7 +42,6 @@
         "x86_64-linux"
       ];
 
-      # system-level outputs (not per-arch)
       flake = {
         nixosConfigurations = {
           desktop = mkHost "desktop";
@@ -50,7 +49,6 @@
         };
       };
 
-      # per-arch outputs
       perSystem =
         { pkgs, ... }:
         {

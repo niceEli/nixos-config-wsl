@@ -3,4 +3,5 @@
 
   networking.hostName = "desktop";
   niceeli.gpgKey = "CFF4A1D451688F83";
+  system.stateVersion = "26.05";
 }
