@@ -99,11 +99,6 @@ in
       enable = true;
       enableNushellIntegration = true;
     };
-
-    carapace = {
-      enable = true;
-      enableNushellIntegration = true;
-    };
   };
   services = {
     gpg-agent = {
