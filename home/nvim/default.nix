@@ -110,6 +110,18 @@
       }
       {
         mode = "n";
+        key = "<leader>fo";
+        action.__raw = "function() MiniPick.builtin.buffers() end";
+        options.desc = "Open buffers";
+      }
+      {
+        mode = "n";
+        key = "<leader>fd";
+        action = "<cmd>bdelete<cr>";
+        options.desc = "Delete current buffer";
+      }
+      {
+        mode = "n";
         key = "<M-/>";
         action = "<cmd>nohlsearch<cr>";
         options.desc = "Clear search highlight";
